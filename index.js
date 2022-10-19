@@ -12,10 +12,23 @@ app.use(bodyparser.urlencoded({
 app.use(bodyparser.json())
 
 //Conexion a la base de datos
+console.log(process)
+const uri = `mongodb+srv://${process.env.USUARIO}:${process.env.CONTRA}@cluster0.bgdoogq.mongodb.net/${process.env.DBNAME}`
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('conectao a db')
+}).catch(e => {
+    console.log('error: ', e)
+})
 
-//Importar Datos
+//Importar Rutas
+const authRoutes = require('./routes/auth.js')
 
 //Ruta del Middleware
+app.use('/api/user', authRoutes)
+
 app.get('/', (req, res) => {
     res.json({
         estado: true,
